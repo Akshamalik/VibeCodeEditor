@@ -10,6 +10,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
+  url = env("DATABASE_URL")
 }
 
 enum UserRole{
@@ -27,6 +28,7 @@ model User{
   accounts Account[]
   role UserRole @default(USER)
   createdAt DateTime @default(now())
+  myPlayground Playground[]
   updatedAt DateTime @updatedAt
 }
 
@@ -49,4 +51,24 @@ user User @relation(fields: [userId],references:[id],onDelete:Cascade)
 @@unique([provider,providerAccountId])
 @@index([userId])
 
+}
+
+enum Templates {
+  REACT
+  NEXTJS
+  EXPRESSJS
+  VUE
+  HONO
+  ANGULAR
+}
+
+model Playground {
+  id String @id @default(cuid()) @map("_id") 
+  title String
+  description String?
+  template Templates @default(REACT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId String
+  user User @relation(fields: [userId],references: [id],onDelete:Cascade)
 }
