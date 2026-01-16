@@ -504,18 +504,21 @@ export const AIChatSidePanel: React.FC<AIChatSidePanelProps> = ({
                           remarkPlugins={[remarkGfm, remarkMath]}
                           rehypePlugins={[rehypeKatex]}
                           components={{
-                            code: ({ children, className, inline }) => {
-                              if (inline) {
+                            code: ({ children, className, ...props }) => {
+                              const isInline = !className;
+
+                              if (isInline) {
                                 return (
                                   <code className="bg-zinc-800 px-1 py-0.5 rounded text-sm">
                                     {children}
                                   </code>
                                 );
                               }
+
                               return (
                                 <div className="bg-zinc-800 rounded-lg p-4 my-4">
                                   <pre className="text-sm text-zinc-100 overflow-x-auto">
-                                    <code className={className}>
+                                    <code className={className} {...props}>
                                       {children}
                                     </code>
                                   </pre>
